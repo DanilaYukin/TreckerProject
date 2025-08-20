@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -39,11 +40,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "rest_framework",
+    "corsheaders",
     "django_filters",
     "users",
-    "lms",
+    "habit_tracker",
     "drf_yasg",
     "django_celery_beat",
 ]
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -82,8 +84,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("NAME"),
+        "USER": os.getenv("USER"),
+        "PASSWORD": os.getenv("PASSWORD"),
+        "HOST": os.getenv("HOST"),
+        "PORT": os.getenv("PORT"),
     }
 }
 
@@ -125,3 +131,39 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "users.User"
+
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+    }
+}
+
+CORS_ALLOWED_ORIGINS = [
+    "https://read-only.example.com",
+    "https://read-and-write.example.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",
+]
+
+TELEGRAM_URL = "https://api.telegram.org/bot"
+BOT_TOKEN = os.getenv("BOT_TOKEN")
