@@ -2,6 +2,10 @@ name: Django CI
 
 on: [push, pull_request]
 
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
 
 jobs:
   lint:
@@ -78,6 +82,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "
             sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} &&
+            sudo docker stop myapp || true &&
             sudo docker rm -f myapp || true &&
             sudo docker run -d --name myapp -p 80:8000 \
               -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
