@@ -6,7 +6,6 @@ from django.utils import timezone
 
 
 class Habit(models.Model):
-
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -47,6 +46,14 @@ class Habit(models.Model):
     is_public = models.BooleanField(default=False, verbose_name="Признак публичности")
     last_completed = models.DateField(
         null=True, blank=True, verbose_name="Дата последнего выполнения"
+    )
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name="Владелец",
+        related_name='habit_owner'
     )
 
     def __str__(self):

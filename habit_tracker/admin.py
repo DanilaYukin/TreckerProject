@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from habit_tracker.models import Habit
+
+
+@admin.register(Habit)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ("user", "action")
