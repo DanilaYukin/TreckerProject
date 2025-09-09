@@ -41,6 +41,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: python manage.py test
 
 
@@ -74,9 +76,14 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-          docker stop myapp || true
-          docker rm myapp || true
-          docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-          EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "
+            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} &&
+            sudo docker rm -f myapp || true &&
+            sudo docker run -d --name myapp -p 80:8000 \
+              -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
+              -e DB_NAME=${{ secrets.POSTGRES_DB }} \
+              -e DB_USER=${{ secrets.POSTGRES_USER }} \
+              -e DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
+              -e DB_HOST=${{ secrets.POSTGRES_HOST }} \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+        "

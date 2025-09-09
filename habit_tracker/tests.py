@@ -10,14 +10,30 @@ class HabitTest(APITestCase):
         self.user = User.objects.create(email="admin@lms.ru")
         self.client.force_authenticate(self.user)
         self.habit = Habit.objects.create(
-            user=self.user, place='Place Test', time='00:00', action='Action Test', is_pleasant=True, periodicity=1,
-            duration=60, is_public=True, last_completed="2023-05-05", owner=self.user
+            user=self.user,
+            place="Place Test",
+            time="00:00",
+            action="Action Test",
+            is_pleasant=True,
+            periodicity=1,
+            duration=60,
+            is_public=True,
+            last_completed="2023-05-05",
+            owner=self.user,
         )
 
     def test_create_habit(self):
-        self.data = {"user": self.user.id, "place": "Place Test", "time": "00:00", "action": "Action Test",
-                     "is_pleasant": True, "periodicity": 1, "duration": 60, "is_public": True,
-                     "last_completed": "2023-05-05"}
+        self.data = {
+            "user": self.user.id,
+            "place": "Place Test",
+            "time": "00:00",
+            "action": "Action Test",
+            "is_pleasant": True,
+            "periodicity": 1,
+            "duration": 60,
+            "is_public": True,
+            "last_completed": "2023-05-05",
+        }
 
         response = self.client.post("/habit/create/", data=self.data)
 
@@ -27,9 +43,17 @@ class HabitTest(APITestCase):
 
     def test_list_habits_user(self):
         """Тестирование списка задач пользователя"""
-        habit = Habit.objects.create(
-            user=self.user, place='Place Test', time='00:00', action='Action Test', is_pleasant=True, periodicity=1,
-            duration=60, is_public=True, last_completed="2023-05-05", owner=self.user
+        Habit.objects.create(
+            user=self.user,
+            place="Place Test",
+            time="00:00",
+            action="Action Test",
+            is_pleasant=True,
+            periodicity=1,
+            duration=60,
+            is_public=True,
+            last_completed="2023-05-05",
+            owner=self.user,
         )
 
         response = self.client.get("/habits_user/")
@@ -38,9 +62,17 @@ class HabitTest(APITestCase):
 
     def test_list_habits_is_public(self):
         """Тестирование списка публичных задач"""
-        habit = Habit.objects.create(
-            user=self.user, place='Place Test', time='00:00', action='Action Test', is_pleasant=True, periodicity=1,
-            duration=60, is_public=True, last_completed="2023-05-05", owner=self.user
+        Habit.objects.create(
+            user=self.user,
+            place="Place Test",
+            time="00:00",
+            action="Action Test",
+            is_pleasant=True,
+            periodicity=1,
+            duration=60,
+            is_public=True,
+            last_completed="2023-05-05",
+            owner=self.user,
         )
 
         response = self.client.get("/habits_public/")
@@ -50,14 +82,28 @@ class HabitTest(APITestCase):
     def test_update_habit(self):
         """Тестирование обновления задачи"""
         habit = Habit.objects.create(
-            user=self.user, place='Place Test', time='00:00', action='Action Test', is_pleasant=True, periodicity=1,
-            duration=60, is_public=True, last_completed="2023-05-05", owner=self.user
+            user=self.user,
+            place="Place Test",
+            time="00:00",
+            action="Action Test",
+            is_pleasant=True,
+            periodicity=1,
+            duration=60,
+            is_public=True,
+            last_completed="2023-05-05",
+            owner=self.user,
         )
 
         self.data = {
-            "user": self.user.id, "place": "Place Test 1", "time": "00:00", "action": "Action Test 1",
-            "is_pleasant": True, "periodicity": 1, "duration": 60, "is_public": True,
-            "last_completed": "2023-05-05"
+            "user": self.user.id,
+            "place": "Place Test 1",
+            "time": "00:00",
+            "action": "Action Test 1",
+            "is_pleasant": True,
+            "periodicity": 1,
+            "duration": 60,
+            "is_public": True,
+            "last_completed": "2023-05-05",
         }
 
         response = self.client.put(f"/habit/update/{habit.id}/", data=self.data)
@@ -79,15 +125,23 @@ class HabitTest(APITestCase):
                 "duration": 60,
                 "is_public": True,
                 "last_completed": "2023-05-05",
-                "owner": self.user.id
+                "owner": self.user.id,
             },
         )
 
     def test_delete_habit(self):
         """Тестирование удаления задачи"""
         habit = Habit.objects.create(
-            user=self.user, place='Place Test', time='00:00', action='Action Test', is_pleasant=True, periodicity=1,
-            duration=60, is_public=True, last_completed="2023-05-05", owner=self.user
+            user=self.user,
+            place="Place Test",
+            time="00:00",
+            action="Action Test",
+            is_pleasant=True,
+            periodicity=1,
+            duration=60,
+            is_public=True,
+            last_completed="2023-05-05",
+            owner=self.user,
         )
 
         response = self.client.delete(f"/habit/delete/{habit.id}/")
