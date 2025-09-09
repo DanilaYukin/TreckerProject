@@ -1,9 +1,4 @@
-on:
-jobs:on:
-jobs:on:
-jobs:on:
-jobs:on:
-jobs:name: Django CI
+name: Django CI
 
 on: [push, pull_request]
 
