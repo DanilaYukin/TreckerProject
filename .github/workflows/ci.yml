@@ -87,5 +87,5 @@ jobs:
             -e DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
             -e DB_HOST=${{ secrets.POSTGRES_HOST }} \
             -e DEBUG=${{ secrets.DEBUG }} \
-          ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-        EOF
+            ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          EOF
