@@ -78,8 +78,10 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} &&
+          
           sudo docker stop myapp || true &&
           sudo docker rm -f myapp || true &&
+          
           sudo docker run -d --name myapp -p 80:8000 \
             -e SECRET_KEY='${{ secrets.SECRET_KEY }}' \
             -e DB_NAME=${{ secrets.POSTGRES_DB }} \
@@ -88,4 +90,4 @@ jobs:
             -e DB_HOST=${{ secrets.POSTGRES_HOST }} \
             -e DEBUG=${{ secrets.DEBUG }} \
           ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-          EOF
+        EOF
