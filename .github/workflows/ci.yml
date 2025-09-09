@@ -2,10 +2,6 @@ name: Django CI
 
 on: [push, pull_request]
 
-permissions:
-  contents: write
-  pull-requests: write
-  checks: write
 
 jobs:
   lint:
@@ -91,4 +87,4 @@ jobs:
               -e DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
               -e DB_HOST=${{ secrets.POSTGRES_HOST }} \
             ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-        "
+            "
