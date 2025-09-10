@@ -53,7 +53,7 @@ class Habit(models.Model):
         null=True,
         blank=True,
         verbose_name="Владелец",
-        related_name='habit_owner'
+        related_name="habit_owner",
     )
 
     def __str__(self):
