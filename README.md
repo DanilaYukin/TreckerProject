@@ -76,15 +76,15 @@ docker-compose logs web --tail=20
 
 Приложение доступно по адресу:
 
-**http://158.160.171.133//**
+**http://158.160.187.45//**
 ---
 
 ##  Установка и запуск локально
 
 1. Склонируй репозиторий:
    ```bash
-   git clone https://github.com/DanilaYukin/project_DRF.git
-   cd project_DRF
+   git clone https://github.com/DanilaYukin/TreckerProject.git
+   cd TreckerProject
    
 Создай виртуальное окружение и установи зависимости:
 
